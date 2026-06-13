@@ -122,19 +122,19 @@ func main() {
 	// 3. 创建任务调度Agent
 	scheduler := &SimpleAgent{
 		Name: "任务调度器",
-		SystemPrompt: `你是一个智能任务调度器,负责：
+		SystemPrompt: `你是一个智能任务调度器，负责：
 1. 分析任务需求
 2. 选择最合适的计算节点
 3. 分配任务
 
 选择节点时考虑：负载、CPU核心数、内存、GPU等因素。
 
-使用 service_discovery 工具时,必须提供 action 参数：
+使用 service_discovery 工具时，必须提供 action 参数：
 - 查看所有节点：{"action": "discover_services", "service_type": "compute"}
 - 获取网络统计：{"action": "get_stats"}`,
 		Tool: &ANPTool{
 			Name:        "service_discovery",
-			Description: "服务发现工具,可以查找和选择计算节点",
+			Description: "服务发现工具，可以查找和选择计算节点",
 			Discovery:   discovery,
 		},
 	}
@@ -165,7 +165,7 @@ func main() {
 	}
 
 	// 测试不同类型的任务
-	assignTask("训练一个大型深度学习模型,需要GPU支持")
-	assignTask("处理大量文本数据,需要高内存")
+	assignTask("训练一个大型深度学习模型，需要GPU支持")
+	assignTask("处理大量文本数据，需要高内存")
 	assignTask("运行轻量级数据分析任务")
 }

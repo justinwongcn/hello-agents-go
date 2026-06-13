@@ -53,7 +53,7 @@ func main() {
 	// 创建协调者Agent
 	coordinator := &SimpleAgent{Name: "协调者"}
 
-	// 添加A2A工具,连接到研究员Agent
+	// 添加A2A工具，连接到研究员Agent
 	researcherTool := &A2ATool{
 		AgentURL: "http://localhost:5000",
 		Client:   &A2AClient{Endpoint: "http://localhost:5000"},
@@ -62,6 +62,6 @@ func main() {
 
 	// 协调者可以调用研究员Agent
 	// 使用 action="ask" 向 Agent 提问
-	response := coordinator.Run("使用a2a工具,向Agent提问：请研究AI在教育领域的应用")
+	response := coordinator.Run("使用a2a工具，向Agent提问：请研究AI在教育领域的应用")
 	fmt.Println(response)
 }

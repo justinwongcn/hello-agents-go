@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
 	"strings"
 )
@@ -23,11 +22,20 @@ func getStats(vocab map[string]int) map[[2]string]int {
 // mergeVocab 合并词元对
 func mergeVocab(pair [2]string, vIn map[string]int) map[string]int {
 	vOut := make(map[string]int)
-	bigram := regexp.QuoteMeta(strings.Join(pair[:], " "))
-	p := regexp.MustCompile(`(?<!\S)` + bigram + `(?!\S)`)
 	for word, freq := range vIn {
-		wOut := p.ReplaceAllString(word, strings.Join(pair[:], ""))
-		vOut[wOut] = freq
+		tokens := strings.Split(word, " ")
+		var merged []string
+		i := 0
+		for i < len(tokens) {
+			if i < len(tokens)-1 && tokens[i] == pair[0] && tokens[i+1] == pair[1] {
+				merged = append(merged, pair[0]+pair[1])
+				i += 2
+			} else {
+				merged = append(merged, tokens[i])
+				i++
+			}
+		}
+		vOut[strings.Join(merged, " ")] = freq
 	}
 	return vOut
 }

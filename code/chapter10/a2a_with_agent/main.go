@@ -119,7 +119,7 @@ func main() {
 	// 技术专家 Agent
 	techExpert := &A2AServer{
 		Name:        "tech_expert",
-		Description: "技术专家,回答技术相关问题",
+		Description: "技术专家，回答技术相关问题",
 		Version:     "1.0.0",
 		Skills:      make(map[string]func(string) string),
 	}
@@ -130,13 +130,13 @@ func main() {
 			question = strings.TrimSpace(text[idx+len("answer "):])
 		}
 		fmt.Printf("  [技术专家] 回答问题: %s\n", question)
-		return fmt.Sprintf("技术回答：关于'%s',这是一个技术问题的专业解答...", question)
+		return fmt.Sprintf("技术回答：关于'%s'，这是一个技术问题的专业解答...", question)
 	}
 
 	// 销售顾问 Agent
 	salesAdvisor := &A2AServer{
 		Name:        "sales_advisor",
-		Description: "销售顾问,回答销售问题",
+		Description: "销售顾问，回答销售问题",
 		Version:     "1.0.0",
 		Skills:      make(map[string]func(string) string),
 	}
@@ -147,7 +147,7 @@ func main() {
 			question = strings.TrimSpace(text[idx+len("answer "):])
 		}
 		fmt.Printf("  [销售顾问] 回答问题: %s\n", question)
-		return fmt.Sprintf("销售回答：关于'%s',我们有特别优惠...", question)
+		return fmt.Sprintf("销售回答：关于'%s'，我们有特别优惠...", question)
 	}
 
 	// ============================================================
@@ -177,14 +177,14 @@ func main() {
 
 	techTool := NewA2ATool(
 		"tech_expert",
-		"技术专家,回答技术相关问题",
+		"技术专家，回答技术相关问题",
 		"http://localhost:6000",
 		"answer",
 	)
 
 	salesTool := NewA2ATool(
 		"sales_advisor",
-		"销售顾问,回答销售相关问题",
+		"销售顾问，回答销售相关问题",
 		"http://localhost:6001",
 		"answer",
 	)
@@ -199,7 +199,7 @@ func main() {
 
 	receptionist := &SimpleAgent{
 		Name: "接待员",
-		SystemPrompt: `你是客服接待员,负责：
+		SystemPrompt: `你是客服接待员，负责：
 1. 分析客户问题类型（技术问题 or 销售问题）
 2. 使用合适的工具（tech_expert 或 sales_advisor）获取答案
 3. 整理答案并返回给客户

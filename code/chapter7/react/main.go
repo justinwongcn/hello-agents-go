@@ -42,6 +42,7 @@ Action: 你决定采取的行动，必须是以下格式之一：
 
 // 正则表达式（预编译为包级变量）
 var (
+	reThought     = regexp.MustCompile(`(?s)Thought:\s*(.*?)(?:\nAction:|$)`)
 	reAction      = regexp.MustCompile(`(?s)Action:\s*(.*?)$`)
 	reActionName  = regexp.MustCompile(`(\w+)\[`)
 	reActionInput = regexp.MustCompile(`\w+\[(.*)\]`)
@@ -112,7 +113,10 @@ func (a *MyReActAgent) Run(inputText string) string {
 		responseText := a.LLM.Think(messages, 0)
 
 		// 3. 解析输出
-		_, action := a.parseOutput(responseText)
+		thought, action := a.parseOutput(responseText)
+		if thought != "" {
+			fmt.Printf("🤔 思考: %s\n", thought)
+		}
 
 		// 4. 检查完成条件
 		if action != "" && strings.HasPrefix(action, "Finish") {
@@ -144,14 +148,19 @@ func (a *MyReActAgent) Run(inputText string) string {
 
 // parseOutput 解析 LLM 输出，提取 Thought 和 Action
 func (a *MyReActAgent) parseOutput(text string) (string, string) {
-	var action string
+	var thought, action string
+
+	thoughtMatch := reThought.FindStringSubmatch(text)
+	if thoughtMatch != nil {
+		thought = strings.TrimSpace(thoughtMatch[1])
+	}
 
 	actionMatch := reAction.FindStringSubmatch(text)
 	if actionMatch != nil {
 		action = strings.TrimSpace(actionMatch[1])
 	}
 
-	return "", action
+	return thought, action
 }
 
 // parseAction 解析 Action 中的工具名和输入

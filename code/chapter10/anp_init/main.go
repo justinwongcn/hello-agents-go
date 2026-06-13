@@ -151,5 +151,5 @@ func main() {
 	network.ConnectNodes("nlp_agent_1", "nlp_agent_2")
 
 	stats := network.GetNetworkStats()
-	fmt.Printf("✅ 网络构建完成,共 %v 个节点\n", stats["total_nodes"])
+	fmt.Printf("✅ 网络构建完成，共 %v 个节点\n", stats["total_nodes"])
 }

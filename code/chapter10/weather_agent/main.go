@@ -38,8 +38,8 @@ func main() {
 	// 创建天气助手
 	assistant := &SimpleAgent{
 		Name: "天气助手",
-		SystemPrompt: `你是天气助手,可以查询城市天气。
-使用 get_weather 工具查询天气,支持中文城市名。`,
+		SystemPrompt: `你是天气助手，可以查询城市天气。
+使用 get_weather 工具查询天气，支持中文城市名。`,
 		Tool: &MCPTool{
 			Name:          "weather",
 			ServerCommand: []string{"python", "14_weather_mcp_server.py"},

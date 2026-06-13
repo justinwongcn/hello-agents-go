@@ -106,7 +106,7 @@ func main() {
 	// 1. 创建技术专家Agent服务
 	techExpert := &A2AServer{
 		Name:        "tech_expert",
-		Description: "技术专家,回答技术问题",
+		Description: "技术专家，回答技术问题",
 		Skills:      make(map[string]func(string) string),
 	}
 
@@ -116,13 +116,13 @@ func main() {
 			question = strings.TrimSpace(text[idx+len("answer "):])
 		}
 		// 实际应用中,这里会调用LLM或知识库
-		return fmt.Sprintf("技术回答：关于'%s',我建议您查看我们的技术文档...", question)
+		return fmt.Sprintf("技术回答：关于'%s'，我建议您查看我们的技术文档...", question)
 	}
 
 	// 2. 创建销售顾问Agent服务
 	salesAdvisor := &A2AServer{
 		Name:        "sales_advisor",
-		Description: "销售顾问,回答销售问题",
+		Description: "销售顾问，回答销售问题",
 		Skills:      make(map[string]func(string) string),
 	}
 
@@ -131,7 +131,7 @@ func main() {
 		if idx := strings.Index(strings.ToLower(text), "answer "); idx >= 0 {
 			question = strings.TrimSpace(text[idx+len("answer "):])
 		}
-		return fmt.Sprintf("销售回答：关于'%s',我们有特别优惠...", question)
+		return fmt.Sprintf("销售回答：关于'%s'，我们有特别优惠...", question)
 	}
 
 	// 3. 启动服务
@@ -142,7 +142,7 @@ func main() {
 	// 4. 创建接待员Agent（使用HelloAgents的SimpleAgent）
 	receptionist := &SimpleAgent{
 		Name: "接待员",
-		SystemPrompt: `你是客服接待员,负责：
+		SystemPrompt: `你是客服接待员，负责：
 1. 分析客户问题类型（技术问题 or 销售问题）
 2. 将问题转发给相应的专家
 3. 整理专家的回答并返回给客户
@@ -154,7 +154,7 @@ func main() {
 	// 添加技术专家工具
 	techTool := NewA2ATool(
 		"tech_expert",
-		"技术专家,回答技术相关问题",
+		"技术专家，回答技术相关问题",
 		"http://localhost:6000",
 	)
 	receptionist.AddTool(techTool)
@@ -162,7 +162,7 @@ func main() {
 	// 添加销售顾问工具
 	salesTool := NewA2ATool(
 		"sales_advisor",
-		"销售顾问,回答价格、购买相关问题",
+		"销售顾问，回答价格、购买相关问题",
 		"http://localhost:6001",
 	)
 	receptionist.AddTool(salesTool)
