@@ -167,3 +167,13 @@ test_*.py
 !test_tools.py
 .workbuddy/
 memory/
+
+# Go build artifacts
+code/chapter*/*/chapter*
+code/chapter*/*/[a-z_]*
+!code/chapter*/*/*.go
+!code/chapter*/*/*.mod
+!code/chapter*/*/*.sum
+!code/chapter*/*/*.py
+!code/chapter*/*/*.md
+!code/chapter*/*/*.env*
