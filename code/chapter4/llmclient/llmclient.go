@@ -144,3 +144,78 @@ func (c *HelloAgentsLLM) Think(messages []Message, temperature float64) string {
 
 	return collectedContent.String()
 }
+
+// ThinkStream 以流式方式调用大语言模型，返回一个 channel 用于逐块接收响应内容。
+func (c *HelloAgentsLLM) ThinkStream(messages []Message, temperature float64) <-chan string {
+	ch := make(chan string, 64)
+
+	go func() {
+		defer close(ch)
+
+		reqBody := struct {
+			Model       string    `json:"model"`
+			Messages    []Message `json:"messages"`
+			Temperature float64   `json:"temperature"`
+			Stream      bool      `json:"stream"`
+		}{
+			Model:       c.Model,
+			Messages:    messages,
+			Temperature: temperature,
+			Stream:      true,
+		}
+
+		jsonData, err := json.Marshal(reqBody)
+		if err != nil {
+			return
+		}
+
+		req, err := http.NewRequest("POST", c.BaseURL+"/chat/completions", bytes.NewBuffer(jsonData))
+		if err != nil {
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+c.APIKey)
+
+		resp, err := c.client.Do(req)
+		if err != nil {
+			return
+		}
+		defer resp.Body.Close()
+
+		reader := bufio.NewReader(resp.Body)
+		for {
+			line, err := reader.ReadString('\n')
+			if err != nil {
+				break
+			}
+			line = strings.TrimSpace(line)
+			if !strings.HasPrefix(line, "data: ") {
+				continue
+			}
+			data := strings.TrimPrefix(line, "data: ")
+			if data == "[DONE]" {
+				break
+			}
+
+			var chunk struct {
+				Choices []struct {
+					Delta struct {
+						Content string `json:"content"`
+					} `json:"delta"`
+				} `json:"choices"`
+			}
+			if err := json.Unmarshal([]byte(data), &chunk); err != nil {
+				continue
+			}
+			if len(chunk.Choices) == 0 {
+				continue
+			}
+			content := chunk.Choices[0].Delta.Content
+			if content != "" {
+				ch <- content
+			}
+		}
+	}()
+
+	return ch
+}
