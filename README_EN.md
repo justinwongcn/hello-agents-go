@@ -168,7 +168,7 @@ We are an open-source community and welcome any form of contribution!
 ## Star History
 
 <div align='center'>
-    <img src="./docs/images/datawhalechina-hello-agents-stats-20260516.png" alt="Datawhale" width="90%">
+    <img src="./docs/images/star-history-2026618.png" alt="Datawhale" width="90%">
 </div>
 
 <div align="center">
